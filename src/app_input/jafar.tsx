@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import NpmInput from "../npm_inpt/NpmInput";
-import { AppInputRegex } from "./regex";
-//import { IValue } from "./model";
+import { NpmInput } from "../npm_inpt/NpmInput";
+
 interface IProps {
-	//value:IValue
-	value:string;
-	type?:string
-	Pattern?: string;
+	value: string;
+	type?: string;
+	pattern?: RegExp;
+	patternError?: string;
 	label: string;
 	isRequierd?: boolean;
+	isRequierdError?:string;
 	placeholder?: string;
 	onChange: (value: string) => void;
-	pattern?: string;
+	
 }
 interface IState {
 	isValid?: boolean;
@@ -29,7 +29,6 @@ export class Jafar extends Component<IProps, IState> {
 		};
 	}
 
-
 	// 	/**
 	// this function call on 2 condition
 	// 1.if field requierd
@@ -37,7 +36,7 @@ export class Jafar extends Component<IProps, IState> {
 	// 3.inputError show text az an error
 	// */
 
-	inputError=(isRequierd: boolean, isvalid: boolean, isTuch: boolean)=> {
+	inputError = (isRequierd: boolean, isvalid: boolean, isTuch: boolean) => {
 		if (isRequierd === true) {
 			console.log(this.props);
 			if (isvalid === false && isTuch === true) {
@@ -52,46 +51,50 @@ export class Jafar extends Component<IProps, IState> {
 		} else {
 			return;
 		}
-	}
+	};
 
 	/**  
 whith this function:
 1.we can act for isReguier props.for isRequier=true show star
 */
-	starIsRequierd=(isRequierd: boolean)=> {
+	starIsRequierd = (isRequierd: boolean) => {
 		if (this.props.isRequierd === true) {
 			return <span className="text-danger">*</span>;
 		} else {
 			return;
 		}
-	}
+	};
 
 	/**
 	1.we can get input value 
 	2.setState isValis && isTuch
 	*/
+	handlerInput(value: string) {
+		const isvalid = this.checkValidate(value);
 
-	handlerInpur = (value: string) => {
-		console.log(value, 123456);
-	
-		this.props.onChange(value);
-		if (value !== "") {
-			this.setState({
-				isValid: true,
-				isTuch: true,
-			});
-		} else {
-			this.setState({
-				isValid: false,
-				isTuch: true,
-			});
-		}
-	};
+		// console.log(value, 123456);
+		// //bayad donbale rahkari basham ta cole errorharo inja handel konam ta majboor nasham
+		// // hey az props value begiram.vagarna to loop miofte va az set state ziad error mide
+		 this.props.onChange(value);
+
+		// if (value !== "") {
+		// 	//if(!value||!value.toString().trim().lenght){isvelid=false}
+		// 	this.setState({
+		// 		isValid: true,
+		// 		isTuch: true,
+		// 	});
+		// } else {
+		// 	this.setState({
+		// 		isValid: false,
+		// 		isTuch: true,
+		// 	});
+		// }
+	}
+	checkValidate(value: string): boolean {
+		return true;
+	}
 
 	componentDidMount() {
-
-		 debugger;
-		 
 		// const el = document.getElementById(this.inputId);
 		// const e1 = el?.querySelector("inputId");
 		// (e1||{onblur: null}).onblur=()=>{this.setState({
@@ -100,10 +103,6 @@ whith this function:
 		// 	});
 		// 	console.log(this.state.isTuch)
 		// };
-
-
-
-
 		// 		 const el = document.getElementById(this.inputId)
 		// 		const e=el?.addEventListener('blur',  inputTuch =()=> {
 		// 			change to
@@ -121,38 +120,35 @@ whith this function:
 		// 		// 	const gholi = this.inputRef.current.props.onblur();
 		// 		// }, 2000);
 	}
-	setEmailPattern=(pattern:string,value: string) =>{
-		this.props.onChange(value)
-		if ( this.props.Pattern==="email") {
-			if (AppInputRegex.email.test(value)) {
-				return true;
-			} else {
-				alert("You have entered an invalid email address!")
-				return false;
-			}
+	setPattern = (value: string) => {
+		if (this.props.pattern!.test(value)) {
+			return true;
+		} else {
+			//alert("You have entered an invalid email address!")
+			return false;
 		}
-	}
+	};
 
+	/* 
+nemitavanam value ro mostaghim az input begiram.
+agar ba this.props.onChange(value) value ra begiram chom metod ha dar render hast to loop mioftam.
+*/
 
+	// inputEmailValidated = (pattern: string, value: string) => {
+	// 	console.log(value, pattern, "@@@@@");
+	// 	//	this.props.onChange(value);
+	// 	console.log(this.setEmailPattern(value), "%%%%");
+	// 	if (pattern === "email") {
+	// 		if (this.setEmailPattern(value) === true && value !== null) {
+	// 			console.log(value + "890-");
+	// 			return "";
+	// 		} else {
+	// 			return "ایمیل را همانند نمونه وارد کنید";
+	// 		}
+	// 	}
+	// 	return "";
+	// };
 
-
-	inputEmailValidated=(pattern:string,value: string) =>{
-		debugger
-		console.log(value)
-		this.props.onChange(value);
-	debugger;
-	if (this.setEmailPattern(pattern,value)===true ) {
-		debugger
-		console.log(value+"890-")
-		return "";
-	} else {
-		debugger
-		return "ایمیل را همانند نمونه وارد کنید";
-	}
-}
-	
-	
-	
 	render() {
 		return (
 			<div className="form-group" id={this.inputId}>
@@ -163,14 +159,20 @@ whith this function:
 						{/* aya be in shekl neveshtam doroste.ya dar props undefine ham tarif konam */}
 					</label>
 				</div>
+
 				<NpmInput
 					value={this.props.value}
 					onChange={(e: string) => {
-						this.handlerInpur(e);
+						this.handlerInput(e);
 					}}
 					ref={this.inputRef}
 				/>
-				{/* <div> {this.inputEmailValidated(this.props.pattern!,this.props.value)}</div> */}
+				<div>
+				
+					{this.checkValidate(
+						this.props.value
+					)}
+				</div>
 				<div>
 					{this.inputError(
 						this.props.isRequierd!,
@@ -183,3 +185,10 @@ whith this function:
 	}
 }
 
+/**
+<input type="text" ref={element => this.textInput = element} />
+this.textInput.value
+  this.textInput = React.createRef();
+
+
+*/
