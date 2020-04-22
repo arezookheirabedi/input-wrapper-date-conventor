@@ -21,7 +21,7 @@ export class InputWrapper extends Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
 		this.state = {
-			valid: false,
+			valid: this.checkValidate(this.props.value),
 			touch: false,
 		};
 	}
@@ -31,7 +31,12 @@ export class InputWrapper extends Component<IProps, IState> {
 
 	handlerInput(value: string) {
 		const isvalid = this.checkValidate(value);
-		this.props.onChange(value, isvalid);
+		this.setState({
+			valid: isvalid,
+		},()=>{
+			this.props.onChange(value, isvalid);
+		});
+		
 	}
 	componentDidMount() {
 		//	debugger;
@@ -54,37 +59,71 @@ export class InputWrapper extends Component<IProps, IState> {
 	// 	  return true
 	// 	}
 
+	// checkValidate = (value: string): boolean => {
+	// 	debugger;
+	// 	if (this.props.Pattern) {
+	// 		if (this.props.Pattern?.test(value)) {
+	// 			return true;
+	// 		}
+	// 	} else {
+	// 		if (this.props.isRequired === true && !!value) {
+	// 			return true;
+	// 		}
+	// 	}
+	// 	return false; // TODO: fal;something is wrong
+	// };
+
 	checkValidate = (value: string): boolean => {
 		debugger;
 		if (this.props.Pattern) {
-			if (this.props.Pattern?.test(value)) {
-				return true;
+			if (!this.props.Pattern?.test(value)) {
+				return false;
 			}
 		} else {
-			if (this.props.isRequired === true && !!value) {
-				return true;
+			if (this.props.isRequired === true && !value) {
+				return false;
 			}
 		}
-		return false; // TODO: fal;something is wrong
+		return true;
 	};
 
 	renderErrors(): React.ReactNode {
-		const v = this.checkValidate(this.props.value);
-		if (v) return <></>;
-
-		if (this.props.isRequired === true) {
-			return (
-				<em className="text-danger">
-					{this.props.requiredMessageError}
-				</em>
-			);
+		if (this.checkValidate(this.props.value) === false) {
+			if (this.props.isRequired === true) {
+				return (
+					<em className="text-danger">
+						{this.props.requiredMessageError}
+					</em>
+				);
+			} else {
+				if (!!this.props.Pattern) {
+					return (
+						<em className="text-danger">
+							{this.props.patternError}
+						</em>
+					);
+				} else return "";
+			}
 		}
-		if (!!this.props.Pattern) {
-			return <em className="text-danger">{this.props.patternError}</em>;
-		}
-
-		return <></>;
 	}
+
+	// renderErrors(): React.ReactNode {
+	// 	const v = this.checkValidate(this.props.value);
+	// 	if (v) return <></>;
+
+	// 	if (this.props.isRequired === true) {
+	// 		return (
+	// 			<em className="text-danger">
+	// 				{this.props.requiredMessageError}
+	// 			</em>
+	// 		);
+	// 	}
+	// 	if (!!this.props.Pattern) {
+	// 		return <em className="text-danger">{this.props.patternError}</em>;
+	// 	}
+
+	// 	return <></>;
+	// }
 	render() {
 		return (
 			<div className="form-group" id={this.inputId}>
