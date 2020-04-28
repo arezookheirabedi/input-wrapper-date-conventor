@@ -85,7 +85,7 @@ export default class ConvertToDate extends Component<IProps> {
 			"دوشنبه",
 			"سه شنبه",
 			"چهارشنبه",
-			"Tپنج شنبه",
+			"پنج شنبه",
 			"جمعه",
 			"شنبه",
 		];
