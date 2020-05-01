@@ -87,7 +87,7 @@ export class FilmManage extends Component<{}, IState> {
 			options: [
 				{ label: Localization.film, value: "fggggh" },
 				{ label: Localization.time, value: "fggggh" },
-				{ label: Localization.checkStatue, value: "fggggh" }
+				{ label: Localization.checkStatue, value: "fggggh" },
 				// typeOfFilm:[
 				// 	{label:'React',value: Localization.film},
 
@@ -245,36 +245,34 @@ export class FilmManage extends Component<{}, IState> {
 								</div>
 								{/* ////////////////////////////////////grid header with select tag/////////////// */}
 								<div className=" container">
-									
-								<div className="row bg-white ">
-									<div className="col-sm-5 custom-style-catod-select">
-										<CatodSelect
-											options={this.state.options}
-											placeholder={Localization.film}
-										/>
-									</div>
+									<div className="row bg-white ">
+										<div className="col-sm-4 custom-style-catod-select">
+											<CatodSelect
+												options={this.state.options}
+												placeholder={Localization.film}
+											/>
+										</div>
 
-									<div className="col-sm-1 ml-5 custom-style-catod-select">
-										<CatodSelect
-											options={this.state.options}
-											placeholder={Localization.film}
-										/>
-									</div>
-									<div className="col-sm-2 mr-2 custom-style-catod-select">
-										<CatodSelect
-											options={this.state.options}
-											placeholder={Localization.film}
-										/>
-									</div>
-									<div className="col-sm-3 custom-style-catod-select">
-										<CatodSelect
-											options={this.state.options}
-											placeholder={Localization.film}
-										/>
+										<div className="col-sm-2 ml-5 custom-style-catod-select">
+											<CatodSelect
+												options={this.state.options}
+												placeholder={Localization.film}
+											/>
+										</div>
+										<div className="col-sm-2 mr-2 custom-style-catod-select">
+											<CatodSelect
+												options={this.state.options}
+												placeholder={Localization.film}
+											/>
+										</div>
+										<div className="col-sm-3 custom-style-catod-select">
+											<CatodSelect
+												options={this.state.options}
+												placeholder={Localization.film}
+											/>
+										</div>
 									</div>
 								</div>
-							
-							</div>
 								{/* ////////////table rows///////////////////////////////////// */}
 
 								<CatodGrid
