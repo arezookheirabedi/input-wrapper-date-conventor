@@ -2,59 +2,74 @@ import React, { Component } from "react";
 import { CatodGrid, Catodcolumn, CatodActions } from "@cattod/react-grid";
 import { Localization } from "../config/localization/localization";
 import { IFilmList } from "./model/IFilmList";
-//import { CatodSelectCustomStyle } from "./CatodSelectCustomStyle";
 import { CatodSelect } from "../CatodSelect/CatodSelect";
-
-enum CHECKSTATUS {
-	DONE = "DONE",
-	ALL = "ALL",
-	WAITFORCHECK = "WAITFORCHECK",
-}
-
-enum PERSON {
-	REVIEWER1 = "REVIEWER1",
-	REVIEWER2 = "REVIEWER2",
-	APPRAISER = "APPRAISER",
-	EDITOR = " EDITOR",
-}
 
 interface IState {
 	columnDefs: Array<Catodcolumn<IFilmList>>;
 	rows: Array<IFilmList>;
-	options?: { label: string; value: any }[];
-	// options?: [typeofFilm:{ label: string, value: any }[],time:{ label: string, value: any }[],
-	//checktatus { label: string, value: any }[],published:{ label: string, value: any }[],
-	// ];
+	option1: { label: string; value: any }[];
+	option2: { label: string; value: any }[];
 }
 
 export class FilmManage extends Component<{}, IState> {
 	constructor(props: {}) {
 		super(props);
 		this.state = {
+			//////////////////table cell////////////////////////
+			option1: [],
+			option2: [],
+
 			columnDefs: [
 				{
-					title: "drop down",
+					title: (
+						<div className="custom-style-catod-select">
+							<CatodSelect
+								options={this.option1}
+								placeholder={Localization.film}
+							/>
+						</div>
+					),
 					key: "film",
 					displayValue: this.cell_filmTitle,
 				},
 
 				{
-					title: Localization.time,
+					title: (
+						<div className=" custom-style-catod-select">
+							<CatodSelect
+								options={this.option2}
+								placeholder={Localization.time}
+							/>
+						</div>
+					),
 
-					key: "remainTime",
+					key: "",
 					displayValue: this.cell_timeTitle,
 				},
 				{
-					title: Localization.checkStatue,
+					title: (
+						<div className="custom-style-catod-select ">
+							<CatodSelect
+								options={this.option3}
+								placeholder={Localization.checkStatue}
+							/>
+						</div>
+					),
 
-					key: "chechStatue",
+					key: "",
 					displayValue: this.cell_chechStatue,
 				},
 
 				{
-					title: Localization.published,
-
-					key: "published",
+					title: (
+						<div className="custom-style-catod-select">
+							<CatodSelect
+								options={this.option4}
+								placeholder={Localization.publishedtatus}
+							/>
+						</div>
+					),
+					key: "",
 					displayValue: this.cell_published,
 				},
 				{
@@ -68,11 +83,12 @@ export class FilmManage extends Component<{}, IState> {
 					displayValue: this.cell_remove,
 				},
 			],
+			//////////////////table row////////////////////////////////////////
 			rows: [
 				{
 					title: "godfather",
 					timeRemained: 45555,
-					chechStatue: true,
+					chechStatue: false,
 					published: true,
 					id: 3445,
 				},
@@ -80,41 +96,42 @@ export class FilmManage extends Component<{}, IState> {
 					title: "godfather",
 					timeRemained: 45555,
 					chechStatue: true,
-					published: true,
+					published: false,
 					id: 3445,
 				},
 			],
-			options: [
-				{ label: Localization.film, value: "fggggh" },
-				{ label: Localization.time, value: "fggggh" },
-				{ label: Localization.checkStatue, value: "fggggh" },
-				// typeOfFilm:[
-				// 	{label:'React',value: Localization.film},
-
-				//   ],
-				//   timeRemain:[
-				// 	{label:'React',value: Localization.time},
-
-				//   ],
-				//   checkStatus:[
-				// 	{label:'React',value: Localization.checkStatus},
-
-				//   ],
-				//   published:[
-				// 	{label:'React',value: Localization.published}
-				//   ],
-			],
+			////////////////////select options//////////////////////////
 		};
 	}
+	option1: { label: string; value: string }[] = [
+		{ label: "فیلم", value: "hjh" },
+		{ label: "سریال", value: "hjhj" },
+		{ label: "مستند", value: "hbjhk" },
+	];
+	option2: { label: string; value: string }[] = [
+		{ label: "fsthbrtvsdg", value: "hjh" },
+		{ label: "sdthbfh", value: "hjhj" },
+		{ label: "dfhgbdtfgh", value: "hbjhk" },
+	];
+	option3: { label: string; value: string }[] = [
+		{ label: "572752", value: "hjh" },
+		{ label: "7852875", value: "hjhj" },
+		{ label: "78563853", value: "hbjhk" },
+	];
+	option4: { label: string; value: string }[] = [
+		{ label: "فیلمfgf", value: "hjh" },
+		{ label: "سریالfd", value: "hjhj" },
+		{ label: "مستندfg", value: "hbjhk" },
+	];
 	///////////////////////////celFilm title//////////////////////////////////////////////////////
 	cell_filmTitle(FilmList: IFilmList): React.ReactNode {
 		return (
 			<>
-				<div className="w">
+				<div className="pl-3">
 					{`${Localization.film} : ${FilmList.title}`}
 					<i className="fa fa-play-circle  p-2" />
 				</div>
-				<div className="d-flex film-person-role">
+				<div className="d-flex film-person-role pl-3">
 					<div className="role px-2 mr-3 py-1 border-bottom border-success">
 						<span>{`${Localization.apprasier1}`}</span>
 					</div>
@@ -138,45 +155,71 @@ export class FilmManage extends Component<{}, IState> {
 	cell_chechStatue(FilmList: IFilmList): React.ReactNode {
 		return (
 			<>
-				<button type="button" className="btn btn-success">
-					{FilmList.chechStatue === true
-						? "اتمام بررسی"
-						: "اتمام بررسی"}
-				</button>
+				{/* <button className="btn btn-sm btn-success"> */}
+				{FilmList.chechStatue === true ? (
+					<div>
+					<button className="btn btn-sm btn-success cell-btn-style d-none d-sm-block">
+						<span className="p-1"> اتمام بررسی</span>
+					</button>
+					<i className="fa fa-check text-success d-md-none d-lg-block "/>
+					</div>
+				) : (
+					<div>
+					<button className="btn btn-sm btn-system cell-btn-style  d-none d-sm-block">
+						<span className="p-1"> اتمام بررسی</span>
+					</button>
+					<i className="fa fa-check   text-system d-block d-sm-none "/>
+					</div>
+				)}
 			</>
 		);
 	}
 	cell_published(FilmList: IFilmList): React.ReactNode {
 		return (
 			<>
-				<button type="button" className="btn btn-success">
-					{
-						FilmList.published === true
-							? "انتشار یافته"
-							: "در حال انتشار"
-
-						// {`${localization.published}`}:{`${localization.published}`}
-					}
-				</button>
+				{FilmList.chechStatue === true ? (
+					<div>
+					<button className="btn btn-sm btn-success  d-none d-sm-block cell-btn-style">
+						<span className="p-1"> انتشار</span>
+					</button>
+					<i className="fa fa-film   text-success d-block d-sm-none "/>
+					</div>
+				) : (
+					<div>
+					<button className="btn btn-sm btn-system  d-none d-sm-block cell-btn-style">
+						<span className="p-1"> انتشار</span>
+					</button>
+					<i className="fa fa-film   text-system d-block d-sm-none "/>
+					</div>
+				)}
 			</>
 		);
 	}
 	cell_edit(FilmList: IFilmList): React.ReactNode {
 		return (
-			<i
-				//  <i className="fal fa-pencil-alt"></i>
-				title="ویرایش"
-				className="fa fa-pencil  text-muted"
-				//onClick={() => this.removeRow(FilmList.id)}
+			<img
+				src="/static/media/img/icon/pencil-1.png"
+				className="text-muted edit-btn "
+				loading="lazy" 
 			/>
+			// <i
+			// 	title="ویرایش"
+			// 	className="fa fa-pencil fa-2x edit-btn text-muted"
+			// 	//onClick={() => this.removeRow(FilmList.id)}
+			// />
 		);
 	}
 	cell_remove(FilmList: IFilmList) {
 		return (
-			<i
-				title="حذف"
-				className="fa fa-trash  text-danger"
-				//onClick={() => this.removeRow(FilmList.id)}
+			// <i
+			// 	title="حذف"
+			// 	className="fa fa-trash fa-2x remove-btn text-danger"
+			// 	//onClick={() => this.removeRow(FilmList.id)}
+			// />
+			<img
+				src="/static/media/img/icon/delete.jpg"
+				className="text-muted edit-btn "
+				loading="lazy" 
 			/>
 		);
 	}
@@ -184,46 +227,50 @@ export class FilmManage extends Component<{}, IState> {
 	render() {
 		return (
 			<>
-				<div className="container  bg-white mt-3  border border-secondary">
-					{/* ////////////////////////header/////////////////////////// */}
-					<div className="header">
-						<div className="container">
-							<div className="row ">
-								<div className="col-auto mr-auto mt-4 d-flex justify-content-start ">
-									<div className="pl-2">
-										پنهان کردن منو
-										<i className="fa fa-bars pl-2" />
-									</div>
+				<div className=" bg-white   ">
+					<div className="container ">
+						{/* ////////////////////////header/////////////////////////// */}
+						<div className="row  header  ">
+							{/* <div className="col-6  "> */}
+							<div className="col-sm">
+								<div>
+									پنهان کردن منو
+									<i className="fa fa-bars pl-2" />
 								</div>
-								<div className="col-md-4 mt-4 d-flex justify-content-end">
-									<p>{Localization.name}</p>
-									<p> {Localization.familyName}</p>
-									{/* //TODO IT DOSET GET MY PNG.CHESK LINK ADDRESS */}
-									{/* //TODOFONT DOSENT WORK */}
-									{/* <img src="../../public/static/media/img/icon/broken-avatar.png"  className="rounded-pill"/> */}
-									<img
-										src="../../public/static/media/img/icon/broken-avatar.png"
-										className="rounded-pill img-padding"
-									/>
-									<div className="position-relative">
-										<i className="fa fa-bell  text-secondary bell  " />
-										<div className="notif bg-danger"></div>
-									</div>
-								</div>
+							</div>
+							{/* <div className="col-md-6  align-self-center  d-flex justify-content-end "> */}
+							<div className="col-sm-auto mr-4 ">
+								<span>نقی جعفری</span>
+
+								<img
+									src="/static/media/img/icon/broken-avatar.png"
+									className="person-img"
+									loading="lazy" 
+								/>
+								<span className=" position-relative ">
+									<i className="fa fa-bell  text-secondary bell  " />
+									<span className="notif bg-danger"></span>
+								</span>
 							</div>
 						</div>
 					</div>
-					<div className="film-manage-wrapper bg-light">
+					{/* ///////////////////////////////film mande table///////////////////////////////// */}
+					<div className="film-manage-wrapper bg-default">
 						<div className="container">
-							<div className="row  ">
-								<div className="col-auto mr-auto mt-4 d-flex justify-content-start ">
-									<div className="btn btn-primary pr-5 ">
-										<span className="pr-2 ml-3"> + </span>
-										<span>{Localization.newContent}</span>
+							<div className="row  align-items-center ">
+								{/* <div className="col-sm-auto mr-auto "> */}
+								<div className="col-sm-12 col-md-8 mb-1 ">
+									<div className="btn btn-primary padding-create-btn">
+										{/* <span className="pr-4 align-middle  text-white"> */}
+										<i className=" fa fa-plus mr-3" />
+										{/* </span> */}
+										<span className="">
+											{Localization.newContent}
+										</span>
 									</div>
 								</div>
-								<div className="col-md-4 mt-4 d-flex justify-content-end">
-									<div className="input-group  film-title-search">
+								<div className="col-sm-12 col-md-4 ">
+									<div className="input-group input-group-sm   film-title-search">
 										<div className="   input-group-prepend">
 											<div className="input-group-text  icon-wrapper bg-white">
 												<i className="fa fa-search"></i>
@@ -240,47 +287,116 @@ export class FilmManage extends Component<{}, IState> {
 							</div>
 							{/* //////////////////////////////filmList table item///////////// */}
 							<div className="main-wrapper container bg-white mt-3">
-								<div className=" d-flex   justify-content-start ml-3  pt-5">
+								<div className=" d-flex   justify-content-start ml-3  pt-4">
 									<h6>{Localization.ContentList}</h6>
 								</div>
-								{/* ////////////////////////////////////grid header with select tag/////////////// */}
-								<div className=" container">
-									<div className="row bg-white ">
-										<div className="col-sm-4 custom-style-catod-select">
-											<CatodSelect
-												options={this.state.options}
-												placeholder={Localization.film}
-											/>
-										</div>
 
-										<div className="col-sm-2 ml-5 custom-style-catod-select">
-											<CatodSelect
-												options={this.state.options}
-												placeholder={Localization.film}
-											/>
-										</div>
-										<div className="col-sm-2 mr-2 custom-style-catod-select">
-											<CatodSelect
-												options={this.state.options}
-												placeholder={Localization.film}
-											/>
-										</div>
-										<div className="col-sm-3 custom-style-catod-select">
-											<CatodSelect
-												options={this.state.options}
-												placeholder={Localization.film}
-											/>
-										</div>
-									</div>
-								</div>
 								{/* ////////////table rows///////////////////////////////////// */}
+
+								{/* <div className="sm-size"> */}
 
 								<CatodGrid
 									direction={"right"}
 									dataRow={this.state.rows}
-									className="table bg-white table table-padding-zero table-borderless  " //TODO.ADD PADIIG TO EACH ROW&& add border when hover
+									className="table  bg-white table table-borderless p-3 " //TODO.ADD PADIIG TO EACH ROW&& add border when hover
 									columnDef={this.state.columnDefs}
 								/>
+								{/* </div> */}
+								{/* 
+								/////////////////////////pagination////////////////////// */}
+
+								<div className="   d-flex justify-content-center pb-4 ">
+									<nav aria-label="Page navigation example">
+										<ul className="pagination">
+											<li className="page-item mr-1">
+												<a
+													className="page-link"
+													href="#"
+													aria-label="Next"
+												>
+													<span aria-hidden="true">
+														اولین
+													</span>
+													<span className="sr-only">
+														Next
+													</span>
+												</a>
+											</li>
+											<li className="page-item">
+												<a
+													className="page-link"
+													href="#"
+													aria-label="Previous"
+												>
+													<span aria-hidden="true">
+														<i className="fa fa-angle-right text-muted"></i>
+													</span>
+													<span className="sr-only">
+														Previous
+													</span>
+												</a>
+											</li>
+											<li className="page-item">
+												<a
+													className="page-link"
+													href="#"
+												>
+													1
+												</a>
+											</li>
+											<li className="page-item">
+												<a
+													className="page-link"
+													href="#"
+												>
+													2
+												</a>
+											</li>
+											<li className="page-item">
+												<a
+													className="page-link"
+													href="#"
+												>
+													3
+												</a>
+											</li>
+											<li className="page-item">
+												<a
+													className="page-link"
+													href="#"
+													aria-label="Next"
+												>
+													<span aria-hidden="true">
+														<i className="fa fa-angle-left text-muted"></i>
+													</span>
+													<span className="sr-only">
+														Next
+													</span>
+												</a>
+											</li>
+											<li className="page-item ml-1">
+												<a
+													className="page-link"
+													href="#"
+													aria-label="Next"
+												>
+													<span aria-hidden="true">
+														آخرین
+													</span>
+													<span className="sr-only">
+														Next
+													</span>
+												</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+						{/* /////////footer-page footer/////////////////// */}
+						<div className="film-manage-wrapper bg-default ">
+							<div className="container">
+								<div className="row  p-5"></div>
 							</div>
 						</div>
 					</div>
